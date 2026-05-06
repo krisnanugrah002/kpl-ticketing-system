@@ -1,0 +1,21 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VS Code (Opsional: kita ignore workspace pribadi, tapi biarkan extensions.json jika ada)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
