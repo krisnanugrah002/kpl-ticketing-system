@@ -2,40 +2,40 @@
 
 # Event Ticketing & Booking System
 
-Proyek ini adalah implementasi sistem pemesanan tiket acara menggunakan **Clean Architecture** dan **Domain-Driven Design (DDD)** sebagai bagian dari mata kuliah Konstruksi Perangkat Lunak di Institut Teknologi Sepuluh Nopember (ITS) [cite: 1].
+This project is an implementation of an event ticketing system using **Clean Architecture** and **Domain-Driven Design (DDD)** as part of the Software Construction course at Institut Teknologi Sepuluh Nopember (ITS).
 
 ## 1. Prerequisite
 
-Sebelum menjalankan proyek ini, pastikan Anda telah menginstal perangkat lunak berikut:
+Before running this project, make sure you have installed the following software:
 * **Python 3.12+**
-* **uv**: Pengelola dependensi dan environment Python yang sangat cepat.
-* **PostgreSQL**: Database relasional yang wajib digunakan sesuai spesifikasi proyek [cite: 1].
-* **Visual Studio Code**: Editor teks yang direkomendasikan dengan ekstensi:
+* **uv**: An extremely fast Python dependency and environment manager.
+* **PostgreSQL**: The relational database required as per the project specification.
+* **Visual Studio Code**: The recommended text editor with the following extensions:
     * Python (Microsoft)
-    * Ruff (Astral Software) untuk linting dan formatting.
+    * Ruff (Astral Software) for linting and formatting.
 
 ## 2. How to Run This Project
 
-Ikuti langkah-langkah berikut untuk setup awal:
+Follow these steps for the initial setup:
 
-1.  **Sinkronisasi Dependensi**:
-    Gunakan `uv` untuk menginstal semua library yang diperlukan dan membuat virtual environment secara otomatis:
+1.  **Sync Dependencies**:
+    Use `uv` to install all required libraries and automatically create a virtual environment:
     ```bash
     uv sync
     ```
 
-2.  **Aktivasi Virtual Environment**:
+2.  **Activate Virtual Environment**:
     * Windows: `.venv\Scripts\activate`
     * macOS/Linux: `source .venv/bin/activate`
 
-3.  **Menjalankan Aplikasi (FastAPI)**:
-    Gunakan perintah berikut untuk menjalankan server development:
+3.  **Run the Application (FastAPI)**:
+    Use the following command to start the development server:
     ```bash
     uv run uvicorn src.main:app --reload
     ```
 
-4.  **Menjalankan Unit Test**:
-    Untuk memverifikasi logika domain (Target Week 9-10) [cite: 1]:
+4.  **Run Unit Tests**:
+    To verify domain logic (Target Week 9-10):
     ```bash
     uv run pytest
     ```
@@ -44,111 +44,111 @@ Ikuti langkah-langkah berikut untuk setup awal:
 
 ## 3. Business Rules (BR)
 
-Daftar aturan bisnis berikut diekstrak langsung dari *User Stories* dan *Acceptance Criteria* dalam dokumen studi kasus [cite: 1]:
+The following business rules are extracted directly from the *User Stories* and *Acceptance Criteria* in the case study document:
 
 ### Event Management
-* **BR1**: Event tidak dapat dibuat jika tanggal berakhir lebih awal dari tanggal mulai [cite: 1].
-* **BR2**: Kapasitas maksimum event harus lebih besar dari nol [cite: 1].
-* **BR3**: Event yang baru dibuat harus berstatus `Draft` [cite: 1].
-* **BR4**: Event hanya dapat dipublikasikan jika memiliki setidaknya satu kategori tiket aktif [cite: 1].
-* **BR5**: Event hanya dapat dipublikasikan jika total kuota tiket tidak melebihi kapasitas maksimum event [cite: 1].
-* **BR6**: Event dengan status `Draft` dapat diubah menjadi `Published` [cite: 1].
-* **BR7**: Event dengan status `Cancelled` tidak dapat dipublikasikan [cite: 1].
-* **BR8**: Event dengan status `Published` dapat dibatalkan [cite: 1].
-* **BR9**: Event dengan status `Completed` tidak dapat dibatalkan [cite: 1].
-* **BR10**: Saat event dibatalkan, semua kategori tiket tidak dapat lagi dibeli [cite: 1].
-* **BR11**: Saat event dibatalkan, pemesanan yang sudah dibayar harus ditandai sebagai `Refund Required` [cite: 1].
+* **BR1**: An event cannot be created if the end date is earlier than the start date.
+* **BR2**: The maximum capacity of an event must be greater than zero.
+* **BR3**: A newly created event must have a status of `Draft`.
+* **BR4**: An event can only be published if it has at least one active ticket category.
+* **BR5**: An event can only be published if the total ticket quota does not exceed the event's maximum capacity.
+* **BR6**: An event with a `Draft` status can be changed to `Published`.
+* **BR7**: An event with a `Cancelled` status cannot be published.
+* **BR8**: An event with a `Published` status can be cancelled.
+* **BR9**: An event with a `Completed` status cannot be cancelled.
+* **BR10**: When an event is cancelled, all ticket categories can no longer be purchased.
+* **BR11**: When an event is cancelled, bookings that have already been paid must be marked as `Refund Required`.
 
 ### Ticket Category
-* **BR12**: Harga tiket tidak boleh kurang dari nol [cite: 1].
-* **BR13**: Kuota tiket harus lebih besar dari nol [cite: 1].
-* **BR14**: Periode penjualan tiket harus berakhir sebelum atau pada tanggal mulai event [cite: 1].
-* **BR15**: Total kuota semua kategori tiket tidak boleh melebihi kapasitas maksimum event [cite: 1].
-* **BR16**: Kategori tiket dapat dinonaktifkan jika event belum selesai [cite: 1].
-* **BR17**: Pelanggan tidak dapat membeli tiket dari kategori yang tidak aktif [cite: 1].
+* **BR12**: The ticket price must not be less than zero.
+* **BR13**: The ticket quota must be greater than zero.
+* **BR14**: The ticket sales period must end before or on the event's start date.
+* **BR15**: The total quota of all ticket categories must not exceed the event's maximum capacity.
+* **BR16**: A ticket category can be deactivated if the event has not yet completed.
+* **BR17**: Customers cannot purchase tickets from an inactive category.
 
 ### Booking & Payment
-* **BR18**: Pemesanan hanya dapat dibuat untuk event dengan status `Published` [cite: 1].
-* **BR19**: Pemesanan hanya dapat dibuat untuk kategori tiket yang aktif [cite: 1].
-* **BR20**: Pemesanan hanya dapat dibuat dalam periode penjualan tiket [cite: 1].
-* **BR21**: Jumlah tiket dalam pemesanan harus lebih besar dari nol [cite: 1].
-* **BR22**: Jumlah tiket tidak boleh melebihi sisa kuota tiket [cite: 1].
-* **BR23**: Pelanggan tidak boleh memiliki lebih dari satu pemesanan aktif untuk event yang sama [cite: 1].
-* **BR24**: Pemesanan yang baru dibuat harus berstatus `PendingPayment` [cite: 1].
-* **BR25**: Pemesanan harus memiliki batas waktu pembayaran (payment deadline) [cite: 1].
-* **BR26**: Harga total tidak boleh negatif [cite: 1].
-* **BR27**: Pemesanan hanya dapat dibayar jika statusnya `PendingPayment` [cite: 1].
-* **BR28**: Pemesanan tidak dapat dibayar jika batas waktu pembayaran telah lewat [cite: 1].
-* **BR29**: Jumlah pembayaran harus sama dengan harga total pemesanan [cite: 1].
-* **BR30**: Pemesanan dengan status `PendingPayment` berubah menjadi `Expired` setelah batas waktu pembayaran lewat [cite: 1].
-* **BR31**: Pemesanan dengan status `Paid` tidak dapat ditandai sebagai kedaluwarsa [cite: 1].
-* **BR32**: Saat pemesanan kedaluwarsa, kuota tiket yang sebelumnya dipesan harus dilepaskan kembali [cite: 1].
+* **BR18**: A booking can only be created for an event with a `Published` status.
+* **BR19**: A booking can only be created for an active ticket category.
+* **BR20**: A booking can only be created within the ticket sales period.
+* **BR21**: The number of tickets in a booking must be greater than zero.
+* **BR22**: The number of tickets must not exceed the remaining ticket quota.
+* **BR23**: A customer must not have more than one active booking for the same event.
+* **BR24**: A newly created booking must have a status of `PendingPayment`.
+* **BR25**: A booking must have a payment deadline.
+* **BR26**: The total price must not be negative.
+* **BR27**: A booking can only be paid if its status is `PendingPayment`.
+* **BR28**: A booking cannot be paid if the payment deadline has passed.
+* **BR29**: The payment amount must equal the total price of the booking.
+* **BR30**: A booking with a `PendingPayment` status changes to `Expired` after the payment deadline has passed.
+* **BR31**: A booking with a `Paid` status cannot be marked as expired.
+* **BR32**: When a booking expires, the previously reserved ticket quota must be released back.
 
 ### Ticket & Check-in
-* **BR33**: Check-in hanya dapat dilakukan untuk event yang sesuai dengan tiket [cite: 1].
-* **BR34**: Tiket harus berstatus `Active` untuk dapat check-in [cite: 1].
-* **BR35**: Tiket yang sudah check-in tidak dapat digunakan lagi [cite: 1].
-* **BR36**: Check-in hanya dapat dilakukan pada hari H event atau dalam jendela waktu check-in yang diizinkan [cite: 1].
-* **BR37**: Status tiket tidak boleh berubah jika check-in gagal [cite: 1].
+* **BR33**: Check-in can only be performed for the event that corresponds to the ticket.
+* **BR34**: A ticket must have an `Active` status to be checked in.
+* **BR35**: A ticket that has already been checked in cannot be used again.
+* **BR36**: Check-in can only be performed on the day of the event or within the permitted check-in time window.
+* **BR37**: The ticket status must not change if check-in fails.
 
 ### Refund Management
-* **BR38**: Refund hanya dapat diajukan untuk pemesanan dengan status `Paid` [cite: 1].
-* **BR39**: Refund tidak dapat diajukan jika ada tiket dari pemesanan tersebut yang sudah check-in [cite: 1].
-* **BR40**: Refund hanya dapat diajukan sebelum batas waktu refund [cite: 1].
-* **BR41**: Refund hanya dapat disetujui jika statusnya `Requested` [cite: 1].
-* **BR42**: Saat refund disetujui, tiket terkait berubah menjadi `Cancelled` [cite: 1].
-* **BR43**: Saat refund disetujui, pemesanan terkait berubah menjadi `Refunded` [cite: 1].
-* **BR44**: Refund hanya dapat ditolak jika statusnya `Requested` [cite: 1].
-* **BR45**: Alasan penolakan wajib diberikan saat menolak refund [cite: 1].
-* **BR46**: Saat refund ditolak, pemesanan terkait tetap berstatus `Paid` [cite: 1].
-* **BR47**: Refund hanya dapat ditandai sebagai `PaidOut` jika statusnya `Approved` [cite: 1].
-* **BR48**: Referensi pembayaran wajib dicatat saat refund dibayarkan (PaidOut) [cite: 1].
-* **BR49**: Refund yang sudah `PaidOut` tidak dapat disetujui, ditolak, atau dibatalkan lagi [cite: 1].
+* **BR38**: A refund can only be requested for a booking with a `Paid` status.
+* **BR39**: A refund cannot be requested if any ticket from that booking has already been checked in.
+* **BR40**: A refund can only be requested before the refund deadline.
+* **BR41**: A refund can only be approved if its status is `Requested`.
+* **BR42**: When a refund is approved, the associated tickets change to `Cancelled`.
+* **BR43**: When a refund is approved, the associated booking changes to `Refunded`.
+* **BR44**: A refund can only be rejected if its status is `Requested`.
+* **BR45**: A rejection reason must be provided when rejecting a refund.
+* **BR46**: When a refund is rejected, the associated booking remains at `Paid` status.
+* **BR47**: A refund can only be marked as `PaidOut` if its status is `Approved`.
+* **BR48**: A payment reference must be recorded when a refund is paid out (PaidOut).
+* **BR49**: A refund that is already `PaidOut` cannot be approved, rejected, or cancelled again.
 
 ---
 
 ## 4. Initial Domain Model Draft
 
-Model domain ini dirancang berdasarkan prinsip DDD Taktis untuk menjaga konsistensi aturan bisnis (Invariants) [cite: 1].
+This domain model is designed based on Tactical DDD principles to maintain the consistency of business rules (Invariants).
 
 ### Aggregate Root: Event
 * **Entities**: `TicketCategory`
 * **Value Objects**: `DateRange`, `Money`
-* **Responsibility**: Menjaga integritas jadwal event dan kuota tiket global.
+* **Responsibility**: Maintains the integrity of the event schedule and global ticket quota.
 
 ### Aggregate Root: Booking
 * **Value Objects**: `Money`
-* **Responsibility**: Mengelola siklus reservasi tiket dari pembuatan hingga pembayaran atau kedaluwarsa.
+* **Responsibility**: Manages the ticket reservation lifecycle from creation to payment or expiry.
 
 ### Aggregate Root: Ticket
 * **Value Objects**: `TicketCode`
-* **Responsibility**: Digunakan oleh Gate Officer untuk validasi dan proses check-in.
+* **Responsibility**: Used by the Gate Officer for validation and the check-in process.
 
 ### Aggregate Root: Refund
-* **Responsibility**: Mengelola alur pengajuan, persetujuan, dan pembayaran pengembalian dana.
+* **Responsibility**: Manages the flow of refund submission, approval, and payout.
 
 ---
 
 ## 5. Ubiquitous Language Glossary
 
-Istilah-istilah standar yang digunakan dalam proyek ini [cite: 1]:
+Standard terms used in this project:
 
 | Term | Meaning |
 | :--- | :--- |
-| Event | Aktivitas yang diselenggarakan oleh Event Organizer. |
-| Event Organizer | Pengguna yang membuat dan mengelola event. |
-| Customer | Pengguna yang memesan dan membeli tiket. |
-| Gate Officer | Pengguna yang memvalidasi tiket saat check-in. |
-| Ticket Category | Tipe tiket (misal: Regular, VIP, Early Bird). |
-| Quota | Jumlah maksimum tiket yang tersedia per kategori. |
-| Booking | Reservasi sementara sebelum pembayaran selesai. |
-| Pending Payment | Status pemesanan yang menunggu pembayaran. |
-| Paid | Status pemesanan yang sudah lunas. |
-| Expired | Status pemesanan yang melewati batas waktu bayar. |
-| Ticket | Bukti kehadiran yang dibuat setelah pemesanan dibayar. |
-| Ticket Code | Kode unik untuk identifikasi dan validasi tiket. |
-| Check-in | Proses validasi tiket saat peserta masuk lokasi. |
-| Refund | Proses pengembalian uang kepada pelanggan. |
-| Money | Value object yang merepresentasikan jumlah dan mata uang. |
-| Sales Period | Periode waktu kategori tiket dapat dibeli. |
-| Payment Deadline | Batas waktu penyelesaian pembayaran pemesanan. |
+| Event | An activity organized by an Event Organizer. |
+| Event Organizer | A user who creates and manages events. |
+| Customer | A user who orders and purchases tickets. |
+| Gate Officer | A user who validates tickets during check-in. |
+| Ticket Category | A type of ticket (e.g., Regular, VIP, Early Bird). |
+| Quota | The maximum number of tickets available per category. |
+| Booking | A temporary reservation before payment is completed. |
+| Pending Payment | The status of a booking awaiting payment. |
+| Paid | The status of a booking that has been fully paid. |
+| Expired | The status of a booking that has passed its payment deadline. |
+| Ticket | Proof of attendance created after a booking is paid. |
+| Ticket Code | A unique code for ticket identification and validation. |
+| Check-in | The process of validating a ticket when a participant enters the venue. |
+| Refund | The process of returning money to a customer. |
+| Money | A value object representing an amount and currency. |
+| Sales Period | The time period during which a ticket category can be purchased. |
+| Payment Deadline | The deadline for completing a booking payment. |
