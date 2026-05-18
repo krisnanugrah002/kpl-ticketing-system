@@ -1,7 +1,7 @@
 from enum import Enum
 from uuid import UUID, uuid4
 from datetime import datetime, timezone
-from src.domain.value_objects.money import Money # Asumsi Money VO sudah ada
+from src.domain.value_objects.money import Money
 
 class BookingStatus(Enum):
     PENDING_PAYMENT = "PendingPayment"
