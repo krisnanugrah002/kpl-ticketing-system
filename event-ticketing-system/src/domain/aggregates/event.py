@@ -28,9 +28,6 @@ class Event:
             raise ValueError("Maximum capacity must be greater than zero.")
 
     def add_ticket_category(self, category: TicketCategory):
-        """
-        Menambahkan kategori tiket baru ke dalam event.
-        """
         if category.sales_period.end_date > self.date_range.start_date:
             raise ValueError("Ticket sales period must end before or on the event start date.")
 
@@ -41,9 +38,6 @@ class Event:
         self.categories.append(category)
 
     def publish(self):
-        """
-        Mengubah status event menjadi Published (BR6).
-        """
         if self.status == EventStatus.CANCELLED:
             raise ValueError("Cancelled events cannot be published.")
 
@@ -58,9 +52,6 @@ class Event:
         self.status = EventStatus.PUBLISHED
         
     def cancel(self):
-        """
-        Membatalkan event (BR8).
-        """
         if self.status == EventStatus.COMPLETED:
             raise ValueError("Completed events cannot be cancelled.")
         
@@ -70,9 +61,6 @@ class Event:
             category.deactivate()
 
     def complete_event(self):
-        """
-        Menandai acara telah selesai.
-        """
         self.status = EventStatus.COMPLETED
 
     @property

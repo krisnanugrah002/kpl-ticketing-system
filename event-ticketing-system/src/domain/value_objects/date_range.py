@@ -11,8 +11,4 @@ class DateRange:
             raise ValueError("End date cannot be earlier than start date.")
 
     def is_within_range(self, date_to_check: datetime) -> bool:
-        """
-        Fungsi bantuan untuk mengecek apakah suatu tanggal (misal saat pelanggan mau beli tiket)
-        masih berada di dalam periode jadwal ini.
-        """
         return self.start_date <= date_to_check <= self.end_date
