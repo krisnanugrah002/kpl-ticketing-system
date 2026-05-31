@@ -39,7 +39,6 @@ class Booking:
 
     def pay(self, payment_amount: Money):
 
-   
         if self.status != BookingStatus.PENDING_PAYMENT:
             raise ValueError("A booking can only be paid if its status is PendingPayment.")
 
