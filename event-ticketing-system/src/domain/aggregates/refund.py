@@ -33,7 +33,7 @@ class Refund:
         current_time: datetime
     ) -> "Refund":
        
-        # BR38:
+        # BR38
         if booking.status != BookingStatus.PAID:
             raise ValueError("Refund can only be requested for a Paid booking.")
 
