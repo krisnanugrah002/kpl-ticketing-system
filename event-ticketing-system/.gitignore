@@ -19,3 +19,16 @@ Thumbs.db
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+
+# Environments (File rahasia jangan sampai masuk GitHub!)
+.env
+.venv/
+venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDE
+.vscode/
