@@ -22,6 +22,11 @@ from src.application.query_handlers.get_available_events_handler import GetAvail
 from src.application.query_handlers.get_event_participants_handler import GetEventParticipantsHandler
 from src.application.query_handlers.get_event_sales_report_handler import GetEventSalesReportHandler
 
+from src.application.command_handlers.cancel_event_handler import CancelEventHandler
+
+def get_cancel_event_handler(repository: EventRepositoryImpl = Depends(get_event_repository)) -> CancelEventHandler:
+    return CancelEventHandler(repository)
+
 def get_payment_gateway() -> MockPaymentGatewayImpl:
     return MockPaymentGatewayImpl()
 

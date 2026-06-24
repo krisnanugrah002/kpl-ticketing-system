@@ -13,11 +13,16 @@ from src.application.command_handlers.publish_event_handler import PublishEventH
 from src.application.query_handlers.get_available_events_handler import GetAvailableEventsHandler
 from src.application.query_handlers.get_event_participants_handler import GetEventParticipantsHandler
 
+from src.application.commands.cancel_event_command import CancelEventCommand
+from src.application.command_handlers.cancel_event_handler import CancelEventHandler
+from src.presentation.dependencies import get_cancel_event_handler
+
 from src.presentation.dependencies import (
     get_create_event_handler,
     get_publish_event_handler,
     get_available_events_handler,
-    get_event_participants_handler
+    get_event_participants_handler,
+    get_cancel_event_handler
 )
 
 router = APIRouter(prefix="/events", tags=["Events"])
@@ -86,3 +91,15 @@ def get_event_participants(
         return participants
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.post("/{event_id}/cancel", status_code=status.HTTP_200_OK)
+def cancel_event(
+    event_id: uuid.UUID,
+    handler: CancelEventHandler = Depends(get_cancel_event_handler)
+):
+    try:
+        command = CancelEventCommand(event_id=event_id)
+        handler.handle(command)
+        return {"message": "Event cancelled successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
