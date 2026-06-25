@@ -1,6 +1,4 @@
 ### 1. Create a New Event
-# Saat request ini sukses, kamu akan mendapat balikan JSON berisi "event_id".
-# SALIN "event_id" TERSEBUT untuk digunakan di request nomor 2, 3, dan 4!
 POST http://localhost:8000/events/
 Content-Type: application/json
 
@@ -30,29 +28,23 @@ Content-Type: application/json
 }
 
 ### 2. Publish the Event
-# GANTI teks GANTI_DENGAN_EVENT_ID_MU dengan id yang kamu dapat di langkah 1
-POST http://localhost:8000/events/GANTI_DENGAN_EVENT_ID_MU/publish
+POST http://localhost:8000/events/91ed21ba-7e78-4604-86fa-5bcb41f7714e/publish
 Content-Type: application/json
 
 
 ### 3. Get All Available (Published) Events
-# Setelah Event di-publish, request ini seharusnya memunculkan event yang baru kamu buat
 GET http://localhost:8000/events/available
 
 
 ### 4. Get Event Participants
-# GANTI teks GANTI_DENGAN_EVENT_ID_MU dengan id yang sama.
-# Saat ini akan menghasilkan array kosong [] karena belum ada fitur Booking
-GET http://localhost:8000/events/GANTI_DENGAN_EVENT_ID_MU/participants
+GET http://localhost:8000/events/91ed21ba-7e78-4604-86fa-5bcb41f7714e/participants
 
 
 ### 5. Check-In a Ticket
-# Ini akan mengembalikan "400 Bad Request: Ticket not found" sampai temanmu
-# menyelesaikan fitur Booking dan memasukkan tiket asli ke database.
 POST http://localhost:8000/tickets/check-in
 Content-Type: application/json
 
 {
-  "event_id": "123e4567-e89b-12d3-a456-426614174000",
+  "event_id": "91ed21ba-7e78-4604-86fa-5bcb41f7714e",
   "ticket_code": "A1B2C3D4E5"
 }

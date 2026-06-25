@@ -1,5 +1,6 @@
 import uuid
-from fastapi import APIRouter, Depends, HTTPException, status
+from alembic.util import status
+from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 
 from src.presentation.schemas.event_schema import EventCreate
@@ -15,7 +16,14 @@ from src.application.query_handlers.get_event_participants_handler import GetEve
 
 from src.application.commands.cancel_event_command import CancelEventCommand
 from src.application.command_handlers.cancel_event_handler import CancelEventHandler
-from src.presentation.dependencies import get_cancel_event_handler
+
+from src.application.commands.disable_ticket_category_command import DisableTicketCategoryCommand
+from src.application.command_handlers.disable_ticket_category_handler import DisableTicketCategoryHandler
+from src.application.queries.get_event_details_query import GetEventDetailsQuery
+from src.application.query_handlers.get_event_details_handler import GetEventDetailsHandler
+from src.presentation.dependencies import get_disable_ticket_category_handler, get_session
+from sqlalchemy.orm import Session
+
 
 from src.presentation.dependencies import (
     get_create_event_handler,
@@ -103,3 +111,29 @@ def cancel_event(
         return {"message": "Event cancelled successfully"}
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.post("/{event_id}/categories/{category_id}/disable", status_code=status.HTTP_200_OK)
+def disable_ticket_category(
+    event_id: uuid.UUID,
+    category_id: uuid.UUID,
+    handler: DisableTicketCategoryHandler = Depends(get_disable_ticket_category_handler)
+):
+    try:
+        command = DisableTicketCategoryCommand(event_id=event_id, category_id=category_id)
+        handler.handle(command)
+        return {"message": "Ticket category disabled successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.get("/{event_id}", status_code=status.HTTP_200_OK)
+def get_event_details(
+    event_id: uuid.UUID,
+    session: Session = Depends(get_session)
+):
+    try:
+        handler = GetEventDetailsHandler(session)
+        query = GetEventDetailsQuery(event_id=event_id)
+        event = handler.handle(query)
+        return event
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
