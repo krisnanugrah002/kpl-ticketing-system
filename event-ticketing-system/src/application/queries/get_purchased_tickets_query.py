@@ -3,4 +3,4 @@ import uuid
 
 @dataclass
 class GetPurchasedTicketsQuery:
-    booking_id: uuid.UUID
+    customer_id: uuid.UUID

@@ -24,6 +24,8 @@ from src.application.query_handlers.get_event_sales_report_handler import GetEve
 from src.application.command_handlers.cancel_event_handler import CancelEventHandler
 
 from src.application.command_handlers.disable_ticket_category_handler import DisableTicketCategoryHandler
+from src.application.query_handlers.get_purchased_tickets_handler import GetPurchasedTicketsHandler
+from src.application.command_handlers.expire_booking_handler import ExpireBookingHandler
 
 def get_payment_gateway() -> MockPaymentGatewayImpl:
     return MockPaymentGatewayImpl()
@@ -91,3 +93,14 @@ def get_disable_ticket_category_handler(repository: EventRepositoryImpl = Depend
 
 def get_cancel_event_handler(repository: EventRepositoryImpl = Depends(get_event_repository)) -> CancelEventHandler:
     return CancelEventHandler(repository)
+
+def get_purchased_tickets_handler(
+    ticket_repo = Depends(get_ticket_repository) 
+) -> GetPurchasedTicketsHandler:
+    return GetPurchasedTicketsHandler(ticket_repo)
+
+def get_expire_booking_handler(
+    booking_repo = Depends(get_booking_repository),
+    event_repo = Depends(get_event_repository)
+) -> ExpireBookingHandler:
+    return ExpireBookingHandler(booking_repo, event_repo)

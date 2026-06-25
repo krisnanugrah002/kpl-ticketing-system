@@ -1,7 +1,7 @@
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 from src.domain.value_objects.ticket_code import TicketCode
 
 class TicketStatus(Enum):
@@ -17,6 +17,7 @@ class Ticket:
     category_id: uuid.UUID
     code: TicketCode
     status: TicketStatus = field(default=TicketStatus.ACTIVE)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     domain_events: list = field(default_factory=list)
 
     def check_in(self, event_id: uuid.UUID, current_time: datetime):

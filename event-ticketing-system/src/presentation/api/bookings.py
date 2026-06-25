@@ -52,11 +52,6 @@ def pay_booking(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-def get_expire_booking_handler(
-    booking_repo = Depends(get_booking_repository),
-    event_repo = Depends(get_event_repository)
-) -> ExpireBookingHandler:
-    return ExpireBookingHandler(booking_repo, event_repo)
 
 @router.post("/{id}/expire")
 def expire_booking(

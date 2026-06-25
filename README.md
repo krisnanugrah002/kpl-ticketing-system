@@ -28,14 +28,31 @@ Follow these steps for the initial setup:
     * Windows: `.venv\Scripts\activate`
     * macOS/Linux: `source .venv/bin/activate`
 
-3.  **Run the Application (FastAPI)**:
+3.  **Database Configuration**:
+    You need to configure your PostgreSQL credentials before running the app. Create a `.env` file in the root directory and add the following variables:
+    ```env
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_USER=postgres
+    DB_PASSWORD=your_password
+    DB_NAME=ticketing_db
+    ```
+    *(Make sure you have created the empty database `ticketing_db` in your PostgreSQL server).*
+
+4.  **Run Database Migrations**:
+    Apply the database schema using Alembic:
+    ```bash
+    alembic upgrade head
+    ```
+
+5.  **Run the Application (FastAPI)**:
     Use the following command to start the development server:
     ```bash
     uv run uvicorn src.main:app --reload
     ```
 
-4.  **Run Unit Tests**:
-    To verify domain logic (Target Week 9-10):
+6.  **Run Unit Tests**:
+    To verify domain logic:
     ```bash
     uv run pytest
     ```
@@ -152,3 +169,105 @@ Standard terms used in this project:
 | Money | A value object representing an amount and currency. |
 | Sales Period | The time period during which a ticket category can be purchased. |
 | Payment Deadline | The deadline for completing a booking payment. |
+
+---
+
+## 6. List of Implemented User Stories
+
+Below are the 20 minimum user stories successfully implemented in this project:
+
+**Event Management**
+1. Create Event
+2. Publish Event
+3. Cancel Event
+
+**Ticket Category Management**
+4. Create Ticket Category
+5. Disable Ticket Category
+
+**Event Browsing and Ticket Booking**
+6. View Available Events
+7. View Event Details
+8. Create Ticket Booking
+9. Calculate Booking Total Price
+
+**Booking Payment**
+10. Pay Booking
+11. Expire Booking
+
+**Ticket and Check-in Management**
+12. View Purchased Tickets
+13. Check In Ticket
+14. Reject Invalid Ticket Check-in
+
+**Refund Management**
+15. Request Refund
+16. Approve Refund
+17. Reject Refund
+18. Mark Refund as Paid Out
+
+**Reporting**
+19. View Event Sales Report
+20. View Event Participants
+
+---
+
+## 7. List of Implemented Domain Events
+
+The system publishes the following domain events when state changes occur within aggregates:
+
+* `EventCreated`
+* `EventPublished`
+* `EventCancelled`
+* `TicketCategoryCreated`
+* `TicketCategoryDisabled`
+* `TicketReserved` (Triggered upon booking creation)
+* `BookingPaid`
+* `BookingExpired`
+* `TicketCheckedIn`
+* `RefundRequested`
+* `RefundApproved`
+* `RefundRejected`
+* `RefundPaidOut`
+
+---
+
+## 8. List of Implemented Application Service Interfaces
+
+To communicate with external systems and maintain Clean Architecture boundaries, the following interfaces are defined in the Application Layer and implemented in the Infrastructure Layer:
+
+1. **`PaymentGateway`**: Used to process booking payments and verify transaction amounts.
+2. **`NotificationService`**: Used to send notifications (e.g., Email/WhatsApp) to customers.
+3. **`EventQueryService`** & **`SalesQueryService`**: CQRS query interfaces used specifically to fetch projection data such as participant lists and sales reports without loading heavy domain aggregates.
+
+---
+
+## 9. API Documentation & Testing
+
+To facilitate the testing and validation of our API endpoints, we have provided a *Postman Collection* that covers all user stories implemented in this project.
+
+### How to Run the API using Postman
+
+1. **Import the Collection**:
+   Download the `Event Ticketing System API.postman_collection.json` file from this repository and import it into your Postman application.
+
+2. **Configure Environment**:
+   * Ensure the FastAPI server is running by executing the command: `uv run uvicorn src.presentation.main:app --reload`.
+   * Open the **Variables** tab within the Postman collection.
+   * Ensure the `baseUrl` is set to `http://127.0.0.1:8000`.
+
+3. **Testing Sequence**:
+   To ensure data consistency and proper linkage, please execute the requests in the following order:
+   * **Create Event**: Run this request first.
+   * **Copy UUID**: Copy the `id` (event_id) generated in the response of the *Create Event* request.
+   * **Update Variables**: Paste the `event_id` into the **Variables** tab in Postman (under the `event_id` key) so that subsequent requests (such as *Publish Event*, *Create Ticket Category*, or *Booking*) function correctly.
+
+4. **Validation**:
+   Each request has been configured to return responses that align with the *Acceptance Criteria* specified in the project's *Case Study* document.
+
+   ---
+## 10. Testing Report
+
+For a detailed visual guide and documentation of the system's testing process, including successful API execution examples, database state, and unit test results, please refer to the official testing report PDF:
+
+[**View Testing Report (PDF)**](https://its.id/m/TestingReport)

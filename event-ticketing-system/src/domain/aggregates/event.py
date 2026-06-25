@@ -66,3 +66,15 @@ class Event:
     @property
     def total_reserved_quota(self) -> int:
         return sum(cat.quota for cat in self.categories)
+    
+    def disable_category(self, category_id: uuid.UUID) -> None:
+        category = next((c for c in self.categories if c.id == category_id), None)
+        if not category:
+            raise ValueError("Ticket category not found in this event.")
+        
+        if hasattr(category, 'disable'):
+            category.disable()
+        elif hasattr(category, 'is_active'):
+            category.is_active = False
+        else:
+            category.status = "Disabled"
