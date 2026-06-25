@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 import uuid
 
+class ApproveRefundRequest(BaseModel):
+    pass
+
 class RequestRefundRequest(BaseModel):
     booking_id: uuid.UUID
 

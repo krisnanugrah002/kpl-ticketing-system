@@ -1,3 +1,4 @@
+import uuid
 from src.application.commands.refund_commands import RequestRefundCommand, RejectRefundCommand, MarkRefundPaidOutCommand
 from src.domain.repositories.refund_repository import RefundRepository
 from src.domain.repositories.booking_repository import BookingRepository
@@ -16,16 +17,16 @@ class RequestRefundHandler:
         booking = self.booking_repo.get_by_id(command.booking_id)
         if not booking:
             raise ValueError("Booking not found.")
-        
+
         existing_refund = self.refund_repo.get_by_booking_id(command.booking_id)
         if existing_refund:
             raise ValueError("Refund already requested for this booking.")
 
         tickets = self.ticket_repo.get_by_booking_id(booking.id)
         event = self.event_repo.get_by_id(booking.event_id)
-       
+
         refund_deadline = event.date_range.start_date
-        
+
         refund = Refund.create(booking, tickets, refund_deadline, command.current_time)
         self.refund_repo.save(refund)
         return refund.id

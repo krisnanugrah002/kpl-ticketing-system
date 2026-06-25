@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.presentation.schemas.refund_schema import RequestRefundRequest, RejectRefundRequest, MarkPaidOutRequest
 from src.application.commands.refund_commands import RequestRefundCommand, RejectRefundCommand, MarkRefundPaidOutCommand
+from src.application.commands.approve_refund_command import ApproveRefundCommand
 from src.application.command_handlers.refund_handlers import RequestRefundHandler, RejectRefundHandler, MarkRefundPaidOutHandler
 from src.presentation.dependencies import get_refund_repository, get_booking_repository, get_ticket_repository, get_event_repository, get_approve_refund_handler
 from src.application.command_handlers.approve_refund_handler import ApproveRefundHandler

@@ -11,8 +11,13 @@ from src.application.command_handlers.create_booking_handler import CreateBookin
 from src.application.command_handlers.pay_booking_handler import PayBookingHandler
 from src.application.command_handlers.expire_booking_handler import ExpireBookingHandler
 from src.domain.value_objects.money import Money
-from src.presentation.dependencies import get_create_booking_handler, get_pay_booking_handler
-from src.presentation.dependencies import get_event_repository
+from src.presentation.dependencies import (
+    get_create_booking_handler, 
+    get_pay_booking_handler,
+    get_expire_booking_handler,
+    get_booking_repository,
+    get_event_repository
+)
 
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
